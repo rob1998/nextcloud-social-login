@@ -22,7 +22,7 @@ use Hybridauth\Thirdparty\OpenID\LightOpenID;
  * Subclasses (i.e., providers adapters) can either use the already provided methods or override
  * them when necessary.
  */
-abstract class SOL extends AbstractAdapter implements AdapterInterface
+abstract class OpenID extends AbstractAdapter implements AdapterInterface
 {
     /**
     * LightOpenID instance
@@ -119,22 +119,10 @@ abstract class SOL extends AbstractAdapter implements AdapterInterface
         $this->openIdClient->identity  = $this->openidIdentifier;
         $this->openIdClient->returnUrl = $this->callback;
         $this->openIdClient->required  = [
-            'namePerson/first'       ,
-            'namePerson/last'        ,
             'namePerson/friendly'    ,
             'namePerson'             ,
             'contact/email'          ,
-            'birthDate'              ,
-            'birthDate/birthDay'     ,
-            'birthDate/birthMonth'   ,
-            'birthDate/birthYear'    ,
-            'person/gender'          ,
             'pref/language'          ,
-            'contact/postalCode/home',
-            'contact/city/home'      ,
-            'contact/country/home'   ,
-
-            'media/image/default'    ,
         ];
 
         $authUrl = $this->openIdClient->authUrl();
