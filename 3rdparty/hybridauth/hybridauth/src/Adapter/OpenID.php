@@ -119,22 +119,10 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
         $this->openIdClient->identity  = $this->openidIdentifier;
         $this->openIdClient->returnUrl = $this->callback;
         $this->openIdClient->required  = [
-            'namePerson/first'       ,
-            'namePerson/last'        ,
             'namePerson/friendly'    ,
             'namePerson'             ,
             'contact/email'          ,
-            'birthDate'              ,
-            'birthDate/birthDay'     ,
-            'birthDate/birthMonth'   ,
-            'birthDate/birthYear'    ,
-            'person/gender'          ,
             'pref/language'          ,
-            'contact/postalCode/home',
-            'contact/city/home'      ,
-            'contact/country/home'   ,
-
-            'media/image/default'    ,
         ];
 
         $authUrl = $this->openIdClient->authUrl();
@@ -170,9 +158,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
         if (! $this->openIdClient->identity) {
             throw new UnexpectedApiResponseException('Provider returned an unexpected response.');
         }
-
         $userProfile = $this->fetchUserProfile($openidAttributes);
-
         /* with openid providers we only get user profiles once, so we store it */
         $this->storage->set($this->providerId . '.user', $userProfile);
     }
@@ -192,23 +178,33 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
         $userProfile->identifier  = $this->openIdClient->identity;
 
-        $userProfile->firstName   = $data->get('namePerson/first');
-        $userProfile->lastName    = $data->get('namePerson/last');
+        $name = $this->split_name($data->get('namePerson'));
+
+        $userProfile->firstName   = $name["first_name"];
+        $userProfile->lastName    = $name["last_name"];
         $userProfile->email       = $data->get('contact/email');
         $userProfile->language    = $data->get('pref/language');
-        $userProfile->country     = $data->get('contact/country/home');
-        $userProfile->zip         = $data->get('contact/postalCode/home');
-        $userProfile->gender      = $data->get('person/gender');
-        $userProfile->photoURL    = $data->get('media/image/default');
-        $userProfile->birthDay    = $data->get('birthDate/birthDay');
-        $userProfile->birthMonth  = $data->get('birthDate/birthMonth');
-        $userProfile->birthYear   = $data->get('birthDate/birthDate');
 
         $userProfile = $this->fetchUserGender($userProfile, $data->get('person/gender'));
 
         $userProfile = $this->fetchUserDisplayName($userProfile, $data);
 
         return $userProfile;
+    }
+    
+    /**
+    * Split full name into first- and lastname
+    * 
+    * @param string $name
+    *
+    * @return array
+    */
+    protected function split_name($name) {
+        $parts = explode(" ", $name);
+        $return = array();
+        $return['first_name'] = array_shift($parts);
+        $return['last_name'] = implode(" ", $parts);
+        return $return;
     }
 
     /**
@@ -265,11 +261,9 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
     public function getUserProfile()
     {
         $userProfile = $this->storage->get($this->providerId . '.user');
-
         if (! is_object($userProfile)) {
             throw new UnexpectedApiResponseException('Provider returned an unexpected response.');
         }
-
         return $userProfile;
     }
 }

@@ -62,7 +62,7 @@ class LightOpenID
     protected $version;
     protected $trustRoot;
     protected $aliases;
-    protected $identifier_select = false
+    protected $identifier_select = true
             ;
     protected $ax = false;
     protected $sreg = false;
