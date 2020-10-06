@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>sociallogin</id>
     <name>Social Login</name>
     <summary>Social login via OAuth or OpenID</summary>
-<description><![CDATA[
+    <description>
+        <![CDATA[
 # Social login
 
 Make possible create users and login via Telegram, OAuth or OpenID
@@ -78,8 +78,9 @@ If you want to temporary disable this function (e.g. for login as local admin), 
 You can copy link from specific login button on login page and paste it on provider's website as callback url!
 Some users may get strange reply(Callback) url error from provider even if you pasted the right url, that's because your nextcloud server may generate http urls when you are actually using https.
 Please set 'overwriteprotocol' => 'https', in your config.php file.
-]]></description>
-    <version>3.3.0</version>
+]]>
+    </description>
+    <version>3.4.0</version>
     <licence>agpl</licence>
     <author>zorn-v</author>
     <namespace>SocialLogin</namespace>
@@ -93,11 +94,11 @@ Please set 'overwriteprotocol' => 'https', in your config.php file.
         <nextcloud min-version="15" max-version="99" />
     </dependencies>
     <settings>
-    	<admin>OCA\SocialLogin\Settings\AdminSettings</admin>
+        <admin>OCA\SocialLogin\Settings\AdminSettings</admin>
         <admin-section>OCA\SocialLogin\Settings\AdminSection</admin-section>
         <personal>OCA\SocialLogin\Settings\PersonalSettings</personal>
         <personal-section>OCA\SocialLogin\Settings\AdminSection</personal-section>
-  	</settings>
+    </settings>
     <repair-steps>
         <post-migration>
             <step>OCA\SocialLogin\Migration\SeparateProvidersNameAndTitle</step>
