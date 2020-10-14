@@ -80,7 +80,7 @@ Some users may get strange reply(Callback) url error from provider even if you p
 Please set 'overwriteprotocol' => 'https', in your config.php file.
 ]]>
     </description>
-    <version>3.4.0</version>
+    <version>3.4.1</version>
     <licence>agpl</licence>
     <author>zorn-v</author>
     <namespace>SocialLogin</namespace>
